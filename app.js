@@ -565,7 +565,10 @@ document.addEventListener("visibilitychange", () => { if (document.visibilitySta
 
 /* ---------- start ---------- */
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js").catch(() => {});
+  navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then(reg => reg.update()).catch(() => {});
+  // When a new version takes over, reload once so the newest files are used.
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => { if (!reloaded && S.phase !== "app" ) { reloaded = true; location.reload(); } });
   navigator.serviceWorker.addEventListener("message", e => {
     if (e.data && e.data.type === "open") { const u = new URL(e.data.url); location.hash = u.hash; }
   });

@@ -1,5 +1,5 @@
 // Favor Cards service worker: offline app shell + push notifications.
-const CACHE = "favor-cards-v1";
+const CACHE = "favor-cards-v2"; // change this on every update so phones drop old copies
 const SHELL = [
   "./", "./index.html", "./app.js", "./config.js", "./vendor/supabase.js",
   "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/badge-96.png"
@@ -21,7 +21,7 @@ self.addEventListener("fetch", e => {
   const req = e.request;
   if (req.method !== "GET" || new URL(req.url).origin !== self.location.origin) return;
   e.respondWith(
-    fetch(req).then(res => {
+    fetch(req, { cache: "no-cache" }).then(res => {
       if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(req, copy)); }
       return res;
     }).catch(() => caches.match(req, { ignoreSearch: true }).then(r => r || caches.match("./index.html")))
