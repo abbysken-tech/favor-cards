@@ -229,7 +229,11 @@ details.tpl summary{padding:12px 14px;min-height:48px;font-weight:700;cursor:poi
 </style>
 </head>
 <body>
-<div id="gate"></div>
+<div id="gate"><div style="font-size:54px">💌</div><h2>Opening your cards…</h2><p id="boot-msg">Loading the app. On a slow connection this can take a moment.</p></div>
+<script>
+window.addEventListener("error",function(e){var m=document.getElementById("boot-msg");if(!m)return;var t=e.target||{};m.textContent=t.src?"Couldn't load "+t.src.split("/").pop()+". Check the connection and reload.":"Error: "+(e.message||"unknown")+(e.filename?" ("+e.filename.split("/").pop()+" line "+e.lineno+")":"");},true);
+setTimeout(function(){var m=document.getElementById("boot-msg");if(m)m.innerHTML='Still loading after 20 seconds. Check the connection, then <a href="" onclick="location.reload();return false">tap here to reload</a>.';},20000);
+</script>
 <div id="viewerbar">
   <span class="lbl">Signed in as</span><b id="whoami"></b><span class="sp"></span><span class="sync" id="sync"></span>
 </div>
